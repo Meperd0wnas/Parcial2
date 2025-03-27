@@ -4,9 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import com.parcial.pagos.model.Pago;
+import com.parcial.pagos.model.Producto;
 import com.parcial.pagos.repository.PagosRepository;
 
-import java.util.List;
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -16,14 +17,19 @@ public class PagosService {
 
     private final PagosRepository pagosRepository;
 
-    // Guardar
-    public Pago crearProducto(Pago pago) {
-        return  pagosRepository.save(pago);
-    }
-
-    // Obtener todos 
-    public List<Pago> obtenerTodos() {
-        return pagosRepository.findAll();
+    // registrar el pago con la validacion (Crear)
+    public Pago crearPago(Pago pago) {
+        int valorTotalEsperado = pago.getValorTotal();
+        int ValorTotalReal = 0;
+        ArrayList<Producto> productosDePago = pago.getProductos();
+        for(Producto producto: productosDePago){
+            ValorTotalReal += producto.getPrecio();
+        }
+        if( ValorTotalReal == valorTotalEsperado){
+            return  pagosRepository.save(pago);
+        }else{return null;
+        }
+        
     }
 
     // Obtener
@@ -32,12 +38,12 @@ public class PagosService {
     }
 
     // Actualizar 
-    public Pago actualizarProducto(Pago pago) {
+    public Pago actualizarPago(Pago pago) {
         return pagosRepository.save(pago);
     }
 
     // Eliminar 
-    public void eliminarProducto(String id) {
+    public void eliminarPago(String id) {
         pagosRepository.deleteById(id);
     }
 }

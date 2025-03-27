@@ -19,5 +19,4 @@ public class Pago {
     private ArrayList<Producto> productos;
     private int valorTotal;
 
-    
 }
